@@ -1,6 +1,7 @@
 class GameBoard
   attr_accessor :cells, :win
 
+  #keeps track of cell values, and displays board on game start
   def initialize
     @@cells = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     display_board
@@ -18,10 +19,12 @@ class GameBoard
     @@cells[6..8].each { |n| print n.to_s + " | " }
   end
 
+  #tracks win condition
   def self.won?
     @@win = false
   end
 
+  #checks for every possible win condition
   def check_win(player_symbol)
     if horizontal?(player_symbol) || vertical?(player_symbol) || diagonal?(player_symbol)
       @@win = true
@@ -56,12 +59,14 @@ class GameBoard
 end
 
 class Player
+
+  #sets marker to "X" or "O"
   def initialize(marker)
     @marker = marker
   end
 
   def make_move(number)
-    if GameBoard.cells[number].is_a? Integer
+    if GameBoard.cells[number].is_a? Integer  #makes sure that it is impossible to overwrite an "X" or "O" cell
       GameBoard.cells[number] = @marker.to_s
       end
   end
@@ -76,11 +81,12 @@ def play_game
   while GameBoard.won? == false
     puts "\nPlayer X, make your move!"
     x_input = gets.chomp
-    if x_input.to_i > 9 || x_input.to_i < 1
+    if x_input.to_i > 9 || x_input.to_i < 1  #checks for valid input
       puts "***Please input a valid number***"
       board.display_board
-      redo if true
+      redo if true  #restarts loop if input is invalid
     else
+      #changes cell value, and checks for win conditions/cat game after every turn
       player_x.make_move(x_input.to_i - 1)
       board.display_board
       board.check_win("X")
@@ -93,6 +99,7 @@ def play_game
       board.display_board
       redo if true
     else
+      #changes cell value, and checks for win conditions/cat game after every turn
       player_o.make_move(o_input.to_i - 1)
       board.display_board
       board.check_win("O")
